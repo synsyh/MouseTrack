@@ -27,7 +27,7 @@ def draw_circle(event, x, y, flags, param):
 drawing = False  # 鼠标按下后为True
 ix, iy = -1, -1
 mouse_track = []
-img = np.zeros((512, 512, 3), np.uint8)
+img = np.zeros((255, 255, 1), np.uint8)
 cv2.namedWindow('image')
 cv2.setMouseCallback('image', draw_circle)
 time_now = time.time()
@@ -39,7 +39,7 @@ with open('./MouseTrack' + rand + '.txt', 'w') as f:
             cv2.imshow('image', img)
             k = cv2.waitKey(1) & 0xFF
             if k == 32:
-                img = np.zeros((512, 512, 3), np.uint8)
+                img = np.zeros((256, 256, 3), np.uint8)
                 if mouse_track:
                     start = copy.copy(mouse_track[0])
                     mouse_track[0][-1] = mouse_track[0][-1] - start[-1]
