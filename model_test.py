@@ -12,13 +12,21 @@ def draw_circle(event, x, y, flags, param):
 
     elif event == cv2.EVENT_MOUSEMOVE:
         if drawing:
-            cv2.circle(img, (x, y), 2, (255), -1)
+            x = max(0, x)
+            x = min(x, 254)
+            y = max(0, y)
+            y = min(y, 254)
+            img[y][x][0] = 255
     elif event == cv2.EVENT_LBUTTONUP:
         drawing = False
-        cv2.circle(img, (x, y), 2, (255), -1)
+        x = max(0, x)
+        x = min(x, 254)
+        y = max(0, y)
+        y = min(y, 254)
+        img[y][x][0] = 255
 
 data = np.load('mouse_track.npz')
-model = keras.models.load_model('mouse_track.h5')
+model = keras.models.load_model('./data/mouse_track_0118_1PARA_3.h5')
 x_test = data['arr_2']
 y_test = data['arr_3']
 
@@ -33,9 +41,11 @@ while True:
     cv2.imshow('image', img)
     k = cv2.waitKey(1) & 0xFF
     if k == 32:
+        img = img.astype('float32')
+        img /= 255
         img = np.expand_dims(img, 0)
         predictions = model.predict(img)
-        print(predictions[0])
+        print(np.argmax(predictions[0]))
         img = np.zeros((255, 255, 1), np.uint8)
     elif k == 27:
         break
