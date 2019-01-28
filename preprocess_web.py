@@ -13,12 +13,12 @@ def get_velocity(ps):
 
 
 if __name__ == '__main__':
-    points_data = np.zeros((904, 323, 540, 3))
-    with open('./data/track1000', 'r') as f:
+    points_data = np.zeros((300, 420, 530, 3))
+    with open('./data/sun2', 'r') as f:
         for i, line in enumerate(f.readlines()):
             points = data_trans.analysis_data(line)
             points = sorted(points, key=lambda x: x['time'])
             points = get_velocity(points)
             for point in points:
-                points_data[i][point['x'] - 43][point['y'] - 86] = [1, point['time'], point['v']]
-    np.save('./data/data_web_900', points_data)
+                points_data[i][point['x']][point['y']] = [1, point['time'], point['v']]
+    np.save('./data/data_web_sun', points_data)

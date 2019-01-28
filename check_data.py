@@ -6,7 +6,7 @@ x_min = 1000
 x_max = 0
 y_min = 1000
 y_max = 0
-with open('./data/track1000', 'r') as f:
+with open('./data/yuan2', 'r') as f:
     for i, line in enumerate(f.readlines()):
         ps = data_trans.analysis_data(line)
         ps = sorted(ps, key=lambda x: x['time'])
@@ -16,6 +16,6 @@ with open('./data/track1000', 'r') as f:
         x_max = max(x_max, dt['x'].max())
         y_min = min(y_min, dt['y'].min())
         y_max = max(y_max, dt['y'].max())
-print(x_min, x_max)
-print(y_min, y_max)
+print(x_min, y_min)
+print(x_max, y_max)
 print()
