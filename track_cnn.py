@@ -1,18 +1,11 @@
-'''Trains a simple convnet on the MNIST dataset.
-
-Gets to 99.25% test accuracy after 12 epochs
-(there is still a lot of margin for parameter tuning).
-16 seconds per epoch on a GRID K520 GPU.
-'''
+# 训练模型，单参数
 
 from __future__ import print_function
 import keras
-from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 import numpy as np
-from keras import backend as K
 
 batch_size = 16
 num_classes = 2

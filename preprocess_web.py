@@ -1,6 +1,8 @@
+# 对web采集的数据进行处理
 import numpy as np
 import math
 import data_trans
+import check_data
 
 
 def get_velocity(ps):

@@ -1,3 +1,4 @@
+# 绘制轨迹，并保存npy
 import math
 import random
 import time

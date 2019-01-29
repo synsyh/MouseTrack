@@ -1,3 +1,4 @@
+# 模型再训练，固定好模型，训练全连接层
 import math
 import time
 

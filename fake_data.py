@@ -1,17 +1,10 @@
+# 制作假数据
 import numpy as np
 import pandas as pd
 import math
 import data_trans
 import random
-
-
-def get_velocity(ps):
-    for i in range(len(ps) - 2):
-        ps[i + 1]['v'] = math.sqrt((ps[i + 2]['x'] - ps[i]['x']) ** 2 + (ps[i + 2]['y'] - ps[i]['y']) ** 2) / (
-                ps[i + 2]['time'] - ps[i]['time'])
-    ps[0]['v'] = 0
-    ps[-1]['v'] = ps[-2]['v']
-    return ps
+import draw_time
 
 
 def create_fake(ps):
@@ -20,7 +13,7 @@ def create_fake(ps):
     y_min = 1000
     y_max = 0
     bias_ratio = random.randint(-10, 10)
-    rotate_ratio = random.randint(-10, 10)
+    rotate_ratio = math.radians(random.randint(-30, 30))
     resize_ratio = random.randint(-10, 10)
     dt = pd.DataFrame(ps)
     x_min = min(x_min, dt['x'].min())
@@ -33,8 +26,8 @@ def create_fake(ps):
         x = p['x']
         y = p['y']
         # rotate
-        # x = (x - x_mid) * math.cos(math.radians(rotate_ratio)) - (y - y_mid) * math.sin(math.radians(rotate_ratio)) + x
-        # y = (x - x_mid) * math.sin(math.radians(rotate_ratio)) + (y - y_mid) * math.cos(math.radians(rotate_ratio)) + y
+        x = (x - x_mid) * math.cos(rotate_ratio) + (y - y_mid) * math.sin(rotate_ratio) + x_mid
+        y = (y - y_mid) * math.cos(rotate_ratio) - (x - x_mid) * math.sin(rotate_ratio) + y_mid
         # resize
         x += (x - x_mid) * resize_ratio / 100
         y += (y - y_mid) * resize_ratio / 100
@@ -47,12 +40,17 @@ def create_fake(ps):
 
 
 if __name__ == '__main__':
-    with open('./data/track1000', 'r') as f:
-        with open('./data/fake_track_s', 'w') as w:
-            for i, line in enumerate(f.readlines()):
-                points = data_trans.analysis_data(line)
-                for j in range(10):
-                    points = create_fake(points)
-                    points = sorted(points, key=lambda x: x['time'])
-                    points = get_velocity(points)
-                    w.write()
+    # with open('./data/track1000', 'r') as f:
+    #     with open('./data/fake_track_s', 'w') as w:
+    #         for i, line in enumerate(f.readlines()):
+    #             points = data_trans.analysis_data(line)
+    #             for j in range(10):
+    #                 points = create_fake(points)
+    #                 points = sorted(points, key=lambda x: x['time'])
+    #                 points = get_velocity(points)
+    #                 w.write()
+    # test one data
+    raw_data = '_2x_23_2h_2w_3f_3z_4w_lu_nd_tb_tl_tu_ty_tx_t4_nz_na_me_ll_44_33_2f_hw_hh_he_2h_32_4u_lu_mw_n4_nw_td_w2_u3_td_mz_ma_ld_4l_3z_3z_4b_4g_4t_ld_mb_nd_ty_wf_xn_yx_zxbaxbbnbc3bcwbdabcfbbtbbgbazbanba2bafbad_aa_dh_ef_fa_fy_gu_hm_22_3f_4c_4z_lw_mt_n4_th_ud_uz_ww_xt_yl_zhbadbbbbbxbcubgbbgybhxb2lb34b4fbldbmy'
+    points = data_trans.analysis_data(raw_data)
+    points = create_fake(points)
+    draw_time.draw(points)

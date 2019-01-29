@@ -1,4 +1,4 @@
-# use model to predict
+# 使用模型来预测，单参数模型
 import keras
 import numpy as np
 import cv2

@@ -12,11 +12,9 @@ def point_rotate(angle, x, y, point_x, point_y):
     :param point_y:
     :return:
     """
-    x = np.array(x)
-    y = np.array(y)
     rotate_x = (x - point_x) * math.cos(angle) + (y - point_y) * math.sin(angle) + point_x
     rotate_y = (y - point_y) * math.cos(angle) - (x - point_x) * math.sin(angle) + point_y
     return rotate_x, rotate_y
 
 
-print(point_rotate(45, 0, 2, 0, 0))
+print(point_rotate(math.radians(45), 0, 2, 0, 0))

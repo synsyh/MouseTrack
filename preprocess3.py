@@ -1,3 +1,4 @@
+# 3个参数的数据制作npy
 import numpy as np
 
 data1 = np.load('./data/data_S_1.npy')

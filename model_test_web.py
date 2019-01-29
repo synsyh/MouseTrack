@@ -1,3 +1,4 @@
+# 使用模型来预测，使用绘制数据而不是临时绘制，3参数3分类
 import keras
 import numpy as np
 

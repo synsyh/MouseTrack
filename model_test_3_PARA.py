@@ -1,4 +1,4 @@
-# use model to predict
+# 使用模型来预测，3个参数，2分类
 import math
 import time
 

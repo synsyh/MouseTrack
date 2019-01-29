@@ -1,3 +1,4 @@
+# 训练3参数模型
 from __future__ import print_function
 import keras
 from keras.callbacks import TensorBoard
