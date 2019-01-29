@@ -16,10 +16,10 @@ def get_size(file_path):
             x_max = max(x_max, dt['x'].max())
             y_min = min(y_min, dt['y'].min())
             y_max = max(y_max, dt['y'].max())
-    return x_min, y_min, x_max, y_max
+    return x_min, y_min, x_max*1.1+20, y_max*1.1+20
 
 
-def get_scale_ratio(file_paths, width=255, height=255):
+def get_scale_ratio(file_paths, width=128, height=128):
     if type(file_paths).__name__ == 'list':
         x_max = 0
         y_max = 0
@@ -33,9 +33,10 @@ def get_scale_ratio(file_paths, width=255, height=255):
         _, _, x_max, y_max = get_size(file_paths)
         width_ratio = width / x_max
         height_ratio = height / y_max
+    print(x_max, y_max)
     return width_ratio, height_ratio
 
 
 if __name__ == '__main__':
-    w, h = get_scale_ratio(['./data/sun2', './data/yuan2', './data/yuan2'])
+    w, h = get_scale_ratio(['./data/sun2', './data/yuan2', './data/yu2'])
     print(w, h)

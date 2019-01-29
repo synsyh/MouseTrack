@@ -7,18 +7,18 @@ from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 import numpy as np
 
-batch_size = 32
+batch_size = 16
 # 修改为二分类模型
-num_classes = 3
-epochs = 6
+num_classes = 4
+epochs = 15
 
 # input image dimensions
 # 修改图片大小
-img_rows, img_cols = 255, 255
+img_rows, img_cols = 128, 128
 
 # the data, split between train and test sets
 # (x_train, y_train), (x_test, y_test) = mnist.load_data()
-data = np.load('track_3PEOPLE_DRAW2.npz')
+data = np.load('track_3PEOPLE_DRAW2_10.npz')
 x_train = data['arr_0']
 y_train = data['arr_1']
 x_test = data['arr_2']
@@ -39,11 +39,11 @@ y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 
 model = Sequential()
-model.add(Conv2D(32, kernel_size=(5, 5),
+model.add(Conv2D(32, kernel_size=(3, 3),
                  activation='relu',
                  input_shape=input_shape))
-model.add(Conv2D(64, (5, 5), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+# model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.25))
 model.add(Flatten())
 model.add(Dense(128, activation='relu'))
@@ -62,4 +62,4 @@ model.fit(x_train, y_train,
 score = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
-model.save('model_3PEOPLE_DRAW2.h5')
+model.save('model_3PEOPLE_DRAW2_10.h5')

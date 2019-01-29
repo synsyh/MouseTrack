@@ -2,6 +2,7 @@
 import numpy as np
 import math
 import data_trans
+import fake_data
 import check_data
 
 
@@ -15,36 +16,26 @@ def get_velocity(ps):
 
 
 if __name__ == '__main__':
-    data = np.zeros((900, 255, 255, 3))
-    x_ratio = 255/420
-    y_ratio = 255/530
-    with open('./data/sun2', 'r') as f:
-        for i, line in enumerate(f.readlines()):
-            points = data_trans.analysis_data(line)
-            points = sorted(points, key=lambda x: x['time'])
-            points = get_velocity(points)
-            for point in points:
-                data[i][int(point['x']*x_ratio)][int(point['y']*y_ratio)] = [1, point['time'], point['v']]
-    with open('./data/yuan2', 'r') as f:
-        for i, line in enumerate(f.readlines()):
-            points = data_trans.analysis_data(line)
-            points = sorted(points, key=lambda x: x['time'])
-            points = get_velocity(points)
-            for point in points:
-                data[i + 300][int(point['x']*x_ratio)][int(point['y']*y_ratio)] = [1, point['time'], point['v']]
-    with open('./data/yu2', 'r') as f:
-        for i, line in enumerate(f.readlines()):
-            points = data_trans.analysis_data(line)
-            points = sorted(points, key=lambda x: x['time'])
-            points = get_velocity(points)
-            for point in points:
-                data[i + 600][int(point['x']*x_ratio)][int(point['y']*y_ratio)] = [1, point['time'], point['v']]
+    data = np.zeros((9000, 128, 128, 3))
+    file_paths = ['./data/sun2', './data/yuan2', './data/yu2']
+    x_ratio, y_ratio = check_data.get_scale_ratio(file_paths)
+
+    for n, file_path in enumerate(file_paths):
+        with open(file_path, 'r') as f:
+            for i, line in enumerate(f.readlines()):
+                points = data_trans.analysis_data(line)
+                points = sorted(points, key=lambda x: x['time'])
+                for j in range(10):
+                    points = fake_data.create_fake(points)
+                    points = get_velocity(points)
+                    for point in points:
+                        data[i*10+j+3000*n][int(point['x']*x_ratio)][int(point['y']*y_ratio)] = [1, point['time'], point['v']]
     # 1 sun
-    label1 = np.zeros(300)
+    label1 = np.zeros(3000)
     # 2 yuan
-    label2 = np.ones(300)
+    label2 = np.ones(3000)
     # 3 yu
-    label3 = np.ones(300) * 2
+    label3 = np.ones(3000) * 2
 
     label = np.concatenate((label1, label2, label3))
 
@@ -52,9 +43,9 @@ if __name__ == '__main__':
     np.random.shuffle(data)
     np.random.set_state(state)
     np.random.shuffle(label)
-    x_train = data[:600, :, :, :]
-    y_train = label[:600]
-    x_test = data[600:, :, :, :]
-    y_test = label[600:]
+    x_train = data[:6000, :, :, :]
+    y_train = label[:6000]
+    x_test = data[6000:, :, :, :]
+    y_test = label[6000:]
 
-    np.savez('track_3PEOPLE_DRAW2', x_train, y_train, x_test, y_test)
+    np.savez('track_3PEOPLE_DRAW2_10', x_train, y_train, x_test, y_test)
