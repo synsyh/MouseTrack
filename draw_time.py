@@ -6,7 +6,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import data_trans
 
-data = data_trans.analysis_data('_eb_e2_ey_ft_hd_2w_4l_mc_ne_ta_te_ny_mw_lf_3l_2b_hf_hb_hh_3a_le_nh_u4_xa_ya_y3_3e_2y_2l_2d_hl_hh_hh_hx_2n_3w_l4_nw_wd_y4baubcmbdmbebbedbd2bcdbaw_zn_yx_y2_yf_aa_a4_am_at_b4_ch_de_ed_ey_fu_gl_h2_2e_3b_3y_4t_ln_mh_ng_tb_tx_ut_wm_x2_ye_zd')
+data = data_trans.analysis_data('_ey_gd_2g_3u_lf_m4_n2_ta_nz_ng_me_4x_32_2c_gw_fw_f4_gh_h3_2u_4g_lx_nh_tl_ue_u3_uh_uf_3f_3b_2t_2m_2n_2y_3h_4c_lb_mf_nw_ul_xh_yxbaebbfbblbbcbal_zy_zg_yn_yb_x4_xf_xc_xh_xa_aa_cy_dw_en_f3_gg_he_2a_2x_3n_44_lg_md_na_nx_tt_u4bbhbcfbdbbdzbexbfnbglbhgb3cbmhbxh')
 xs = [data[0]['x']]
 ys = [-data[0]['y']]
 for i in range(len(data) - 1):

@@ -13,12 +13,46 @@ def get_velocity(ps):
 
 
 if __name__ == '__main__':
-    points_data = np.zeros((300, 420, 530, 3))
+    data = np.zeros((900, 255, 255, 3))
+    x_ratio = 255/420
+    y_ratio = 255/530
     with open('./data/sun2', 'r') as f:
         for i, line in enumerate(f.readlines()):
             points = data_trans.analysis_data(line)
             points = sorted(points, key=lambda x: x['time'])
             points = get_velocity(points)
             for point in points:
-                points_data[i][point['x']][point['y']] = [1, point['time'], point['v']]
-    np.save('./data/data_web_sun', points_data)
+                data[i][int(point['x']*x_ratio)][int(point['y']*y_ratio)] = [1, point['time'], point['v']]
+    with open('./data/yuan2', 'r') as f:
+        for i, line in enumerate(f.readlines()):
+            points = data_trans.analysis_data(line)
+            points = sorted(points, key=lambda x: x['time'])
+            points = get_velocity(points)
+            for point in points:
+                data[i + 300][int(point['x']*x_ratio)][int(point['y']*y_ratio)] = [1, point['time'], point['v']]
+    with open('./data/yu2', 'r') as f:
+        for i, line in enumerate(f.readlines()):
+            points = data_trans.analysis_data(line)
+            points = sorted(points, key=lambda x: x['time'])
+            points = get_velocity(points)
+            for point in points:
+                data[i + 600][int(point['x']*x_ratio)][int(point['y']*y_ratio)] = [1, point['time'], point['v']]
+    # 1 sun
+    label1 = np.zeros(300)
+    # 2 yuan
+    label2 = np.ones(300)
+    # 3 yu
+    label3 = np.ones(300) * 2
+
+    label = np.concatenate((label1, label2, label3))
+
+    state = np.random.get_state()
+    np.random.shuffle(data)
+    np.random.set_state(state)
+    np.random.shuffle(label)
+    x_train = data[:600, :, :, :]
+    y_train = label[:600]
+    x_test = data[600:, :, :, :]
+    y_test = label[600:]
+
+    np.savez('track_3PEOPLE_DRAW2', x_train, y_train, x_test, y_test)

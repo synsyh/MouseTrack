@@ -8,7 +8,7 @@ import numpy as np
 
 batch_size = 32
 # 修改为二分类模型
-num_classes = 2
+num_classes = 3
 epochs = 6
 
 # input image dimensions
@@ -17,7 +17,7 @@ img_rows, img_cols = 255, 255
 
 # the data, split between train and test sets
 # (x_train, y_train), (x_test, y_test) = mnist.load_data()
-data = np.load('./data/mouse_track_3_PARA_2_PEOPLE.npz')
+data = np.load('track_3PEOPLE_DRAW2.npz')
 x_train = data['arr_0']
 y_train = data['arr_1']
 x_test = data['arr_2']
@@ -47,7 +47,6 @@ model.add(Dropout(0.25))
 model.add(Flatten())
 model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(10, activation='relu'))
 model.add(Dense(num_classes, activation='softmax'))
 
 model.compile(loss=keras.losses.categorical_crossentropy,
@@ -58,10 +57,8 @@ model.fit(x_train, y_train,
           batch_size=batch_size,
           epochs=epochs,
           verbose=1,
-          validation_data=(x_test, y_test),
-          callbacks=[TensorBoard(log_dir='./tmp/log')])
+          validation_data=(x_test, y_test))
 score = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
-model.save('./data/mouse_track_3_PARA_out.h5')
-
+model.save('model_3PEOPLE_DRAW2.h5')
