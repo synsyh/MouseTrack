@@ -1,3 +1,4 @@
+import keras
 from keras.layers import Input, Conv2D, Lambda, merge, Dense, Flatten, MaxPooling2D, Dropout
 from keras.models import Model, Sequential
 from keras.regularizers import l2
@@ -29,7 +30,8 @@ def test_oneshot(model, k, verbose=0):
     for i in range(k):
         inputs, targets = siamese_preprocess.get_eval_batch()
         probs = model.predict(inputs)
-        if np.argmax(probs) == np.argmax(targets):
+        prob_max = np.argmax(probs)
+        if targets[prob_max] == 1:
             n_correct += 1
     percent_correct = (100.0 * n_correct / k)
     if verbose:
@@ -43,11 +45,16 @@ left_input = Input(input_shape)
 right_input = Input(input_shape)
 
 convnet = Sequential()
-convnet.add(Conv2D(32, (3, 3), activation='relu', input_shape=input_shape))
-convnet.add(Conv2D(64, (3, 3), activation='relu'))
-convnet.add(Dropout(0.25))
+convnet.add(Conv2D(64, (10, 10), activation='relu', input_shape=input_shape))
+convnet.add(MaxPooling2D())
+convnet.add(Conv2D(128, (7, 7), activation='relu'))
+convnet.add(MaxPooling2D())
+convnet.add(Conv2D(128, (4, 4), activation='relu'))
+convnet.add(MaxPooling2D())
+convnet.add(Conv2D(256, (4, 4), activation='relu'))
+# convnet.add(Dropout(0.25))
 convnet.add(Flatten())
-convnet.add(Dense(128, activation='sigmoid'))
+convnet.add(Dense(2048, activation='sigmoid'))
 
 encoded_l = convnet(left_input)
 encoded_r = convnet(right_input)
@@ -57,32 +64,31 @@ L1_distance = L1_layer([encoded_l, encoded_r])
 prediction = Dense(1, activation='sigmoid')(L1_distance)
 siamese_net = Model(inputs=[left_input, right_input], outputs=prediction)
 
-optimizer = Adam(0.00006)
 # //TODO: get layerwise learning rates and momentum annealing scheme described in paperworking
-siamese_net.compile(loss="binary_crossentropy", optimizer=optimizer)
+siamese_net.compile(loss="binary_crossentropy", optimizer=keras.optimizers.Adadelta())
+print(siamese_net.count_params())
 print('train')
 
 PATH = ''
-evaluate_every = 1
+evaluate_every = 100
 loss_every = 100
 batch_size = 32
 n_iter = 9000
 N_way = 20  # how many classes for testing one-shot tasks>
-n_val = 250  # how mahy one-shot tasks to validate on?
+n_val = 100  # how mahy one-shot tasks to validate on?
 best = -1
 weights_path = os.path.join(PATH, "weights")
 print("training")
 for i in range(1, n_iter):
     (inputs, targets) = siamese_preprocess.get_batch()
     loss = siamese_net.train_on_batch(inputs, targets)
-    print(loss)
+    # print(loss)
+    if i % loss_every == 0:
+        print("iteration {}, training loss: {:.5f},".format(i, loss))
     if i % evaluate_every == 0:
         print("evaluating")
         val_acc = test_oneshot(siamese_net, n_val, verbose=True)
-        if val_acc >= best:
-            print("saving")
-            siamese_net.save(weights_path)
-            best = val_acc
-
-    if i % loss_every == 0:
-        print("iteration {}, training loss: {:.2f},".format(i, loss))
+        # if val_acc >= best:
+        #     print("saving")
+        #     siamese_net.save(weights_path)
+        #     best = val_acc

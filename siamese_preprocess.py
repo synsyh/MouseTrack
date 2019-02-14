@@ -42,11 +42,11 @@ def get_batch():
 
     for iter, i in enumerate(k):
         if i < 25000:
-            line = linecache.getline('./data/siamese_data/siamese0_shuffle.txt', i)
+            line = linecache.getline('./data/siamese_data/siamese0_shuffle.txt', i+1)
             label[iter] = 0
         else:
             i -= 25000
-            line = linecache.getline('./data/siamese_data/siamese1_shuffle.txt', i)
+            line = linecache.getline('./data/siamese_data/siamese1_shuffle.txt', i+1)
             label[iter] = 1
         points1 = data_trans.analysis_data(line.split(' ')[0])
         points2 = data_trans.analysis_data(line.split(' ')[1])
@@ -68,11 +68,11 @@ def get_eval_batch():
 
     for iter, i in enumerate(k):
         if i < 5000:
-            line = linecache.getline('./data/siamese_data/siamese_shuffle_eval', i)
+            line = linecache.getline('./data/siamese_data/siamese_shuffle_eval', i+1)
             label[iter] = 0
         else:
             i -= 5000
-            line = linecache.getline('./data/siamese_data/siamese_shuffle_eval', i)
+            line = linecache.getline('./data/siamese_data/siamese_shuffle_eval', i+1)
             label[iter] = 1
         points1 = data_trans.analysis_data(line.split(' ')[0])
         points2 = data_trans.analysis_data(line.split(' ')[1])
