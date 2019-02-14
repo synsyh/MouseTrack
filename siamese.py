@@ -30,8 +30,7 @@ def test_oneshot(model, k, verbose=0):
     for i in range(k):
         inputs, targets = siamese_preprocess.get_eval_batch()
         probs = model.predict(inputs)
-        prob_max = np.argmax(probs)
-        if targets[prob_max] == 1:
+        if np.argmax(probs) == np.argmax(targets):
             n_correct += 1
     percent_correct = (100.0 * n_correct / k)
     if verbose:
@@ -77,7 +76,7 @@ n_iter = 9000
 N_way = 20  # how many classes for testing one-shot tasks>
 n_val = 100  # how mahy one-shot tasks to validate on?
 best = -1
-weights_path = os.path.join(PATH, "weights")
+weights_path = os.path.join(PATH, "weights1")
 print("training")
 for i in range(1, n_iter):
     (inputs, targets) = siamese_preprocess.get_batch()
@@ -88,7 +87,7 @@ for i in range(1, n_iter):
     if i % evaluate_every == 0:
         print("evaluating")
         val_acc = test_oneshot(siamese_net, n_val, verbose=True)
-        # if val_acc >= best:
-        #     print("saving")
-        #     siamese_net.save(weights_path)
-        #     best = val_acc
+        if val_acc >= best:
+            print("saving")
+            siamese_net.save(weights_path)
+            best = val_acc
