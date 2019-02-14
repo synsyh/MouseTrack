@@ -63,23 +63,24 @@ def get_eval_batch():
     x_ratio = 0.27367970921530893
     y_ratio = 0.2158152082279548
     data = [np.zeros((20, 128, 128, 3)) for i in range(2)]
-    file_list = ['./data/siamese_data/sun2', './data/siamese_data/yu2', './data/siamese_data/yuan2']
+    file_list = ['./data/siamese_data/sun_eval', './data/siamese_data/yu_eval', './data/siamese_data/yuan_eval']
     true_file_num = random.choice(range(3))
     file_path = file_list[true_file_num]
     file_list.remove(file_path)
 
     tmp_data = np.zeros((1, 128, 128, 3))
-    true_pair1, true_pair2 = random.choice(range(100), size=(2,))
-    line = linecache.getline(file_path, true_pair1)
+    true_pair1, true_pair2 = np.random.choice(range(100), size=(2,))
+    line = linecache.getline(file_path, true_pair1+1)
     points = data_trans.analysis_data(line)
     points = get_velocity(points)
     for point in points:
         tmp_data[0][int(point['x'] * x_ratio)][int(point['y'] * y_ratio)] = [1, point['time'] / 100,
                                                                              point['v']]
-    data[0] = tmp_data * 20
+    for n in range(20):
+        data[0][n] = tmp_data
 
     true_num = random.choice(range(20))
-    line = linecache.getline(file_path, true_pair2)
+    line = linecache.getline(file_path, true_pair2+1)
     points = data_trans.analysis_data(line)
     points = get_velocity(points)
     for point in points:
@@ -89,8 +90,8 @@ def get_eval_batch():
     lines = []
     for file in file_list:
         with open(file, 'r') as f:
-            lines.append(f.readlines())
-    k = random.choice(range(200), size=(20,))
+            lines += f.readlines()
+    k = np.random.choice(range(200), size=(20,))
     for iter, i in enumerate(k):
         if iter == true_num:
             continue

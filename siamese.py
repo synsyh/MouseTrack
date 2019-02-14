@@ -90,4 +90,5 @@ for i in range(1, n_iter):
         if val_acc >= best:
             print("saving")
             siamese_net.save(weights_path)
+            print('saved')
             best = val_acc
