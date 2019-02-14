@@ -4,6 +4,7 @@ from keras.regularizers import l2
 from keras import backend as K
 from keras.optimizers import SGD, Adam
 import numpy.random as rng
+import numpy as np
 import os
 
 import siamese_preprocess
@@ -20,6 +21,20 @@ def b_init(shape, name=None):
     """Initialize bias as in paper"""
     values = rng.normal(loc=0.5, scale=1e-2, size=shape)
     return K.variable(values, name=name)
+
+
+def test_oneshot(model, k, verbose=0):
+    """Test average N way oneshot learning accuracy of a siamese neural net over k one-shot tasks"""
+    n_correct = 0
+    for i in range(k):
+        inputs, targets = siamese_preprocess.get_eval_batch()
+        probs = model.predict(inputs)
+        if np.argmax(probs) == np.argmax(targets):
+            n_correct += 1
+    percent_correct = (100.0 * n_correct / k)
+    if verbose:
+        print("Got an average of {}% one-shot learning accuracy".format(percent_correct))
+    return percent_correct
 
 
 print('model build')
@@ -48,12 +63,12 @@ siamese_net.compile(loss="binary_crossentropy", optimizer=optimizer)
 print('train')
 
 PATH = ''
-evaluate_every = 500
+evaluate_every = 1
 loss_every = 100
 batch_size = 32
 n_iter = 9000
 N_way = 20  # how many classes for testing one-shot tasks>
-n_val = 250  #how mahy one-shot tasks to validate on?
+n_val = 250  # how mahy one-shot tasks to validate on?
 best = -1
 weights_path = os.path.join(PATH, "weights")
 print("training")
@@ -61,13 +76,13 @@ for i in range(1, n_iter):
     (inputs, targets) = siamese_preprocess.get_batch()
     loss = siamese_net.train_on_batch(inputs, targets)
     print(loss)
-    # if i % evaluate_every == 0:
-    #     print("evaluating")
-    #     val_acc = loader.test_oneshot(siamese_net, N_way, n_val, verbose=True)
-    #     if val_acc >= best:
-    #         print("saving")
-    #         siamese_net.save(weights_path)
-    #         best = val_acc
+    if i % evaluate_every == 0:
+        print("evaluating")
+        val_acc = test_oneshot(siamese_net, n_val, verbose=True)
+        if val_acc >= best:
+            print("saving")
+            siamese_net.save(weights_path)
+            best = val_acc
 
     if i % loss_every == 0:
         print("iteration {}, training loss: {:.2f},".format(i, loss))

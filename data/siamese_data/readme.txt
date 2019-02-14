@@ -1,0 +1,4 @@
+siamese0有3W条，都是不一样的pair，siamese0_shuffle为打乱顺序的2.5W条
+siamese1有3W条，都是一样的pair，siamese1_shuffle为打乱顺序的2.5W条
+siamese_shuffle为6W条打乱顺序的一样和不一样的pair
+siamese_shuffle_eval前5k条为不一样的pair，后5k条为一样的pair

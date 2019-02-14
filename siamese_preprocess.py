@@ -36,28 +36,50 @@ def tmp():
 def get_batch():
     x_ratio = 0.27367970921530893
     y_ratio = 0.2158152082279548
-    k = random.sample(range(60000), 32)
+    k = random.sample(range(50000), 32)
     data = [np.zeros((32, 128, 128, 3)) for i in range(2)]
     label = np.zeros((32,))
 
     for iter, i in enumerate(k):
-        if i < 30000:
-            line = linecache.getline('./data/siamese_data/siamese0.txt', i)
+        if i < 25000:
+            line = linecache.getline('./data/siamese_data/siamese0_shuffle.txt', i)
             label[iter] = 0
         else:
-            i -= 30000
-            line = linecache.getline('./data/siamese_data/siamese1.txt', i)
+            i -= 25000
+            line = linecache.getline('./data/siamese_data/siamese1_shuffle.txt', i)
             label[iter] = 1
         points1 = data_trans.analysis_data(line.split(' ')[0])
         points2 = data_trans.analysis_data(line.split(' ')[1])
         points1 = get_velocity(points1)
         points2 = get_velocity(points2)
         for point in points1:
-            data[0][iter][int(point['x'] * x_ratio)][int(point['y'] * y_ratio)] = [1, point['time']/100, point['v']]
+            data[0][iter][int(point['x'] * x_ratio)][int(point['y'] * y_ratio)] = [1, point['time'] / 100, point['v']]
         for point in points2:
-            data[1][iter][int(point['x'] * x_ratio)][int(point['y'] * y_ratio)] = [1, point['time']/100, point['v']]
+            data[1][iter][int(point['x'] * x_ratio)][int(point['y'] * y_ratio)] = [1, point['time'] / 100, point['v']]
     return data, label
 
 
-data, label = get_batch()
-print()
+def get_eval_batch():
+    x_ratio = 0.27367970921530893
+    y_ratio = 0.2158152082279548
+    k = random.sample(range(10000), 20)
+    data = [np.zeros((20, 128, 128, 3)) for i in range(2)]
+    label = np.zeros((20,))
+
+    for iter, i in enumerate(k):
+        if i < 5000:
+            line = linecache.getline('./data/siamese_data/siamese_shuffle_eval', i)
+            label[iter] = 0
+        else:
+            i -= 5000
+            line = linecache.getline('./data/siamese_data/siamese_shuffle_eval', i)
+            label[iter] = 1
+        points1 = data_trans.analysis_data(line.split(' ')[0])
+        points2 = data_trans.analysis_data(line.split(' ')[1])
+        points1 = get_velocity(points1)
+        points2 = get_velocity(points2)
+        for point in points1:
+            data[0][iter][int(point['x'] * x_ratio)][int(point['y'] * y_ratio)] = [1, point['time'] / 100, point['v']]
+        for point in points2:
+            data[1][iter][int(point['x'] * x_ratio)][int(point['y'] * y_ratio)] = [1, point['time'] / 100, point['v']]
+    return data, label
