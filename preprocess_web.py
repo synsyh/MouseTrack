@@ -29,7 +29,8 @@ if __name__ == '__main__':
                     points = fake_data.create_fake(points)
                     points = get_velocity(points)
                     for point in points:
-                        data[i*10+j+3000*n][int(point['x']*x_ratio)][int(point['y']*y_ratio)] = [1, point['time'], point['v']]
+                        data[i * 10 + j + 3000 * n][int(point['x'] * x_ratio)][int(point['y'] * y_ratio)] = [1, point[
+                            'time'], point['v']]
     # 1 sun
     label1 = np.zeros(3000)
     # 2 yuan

@@ -9,7 +9,6 @@ from preprocess_web import get_velocity
 data = np.zeros((60, 128, 128, 3))
 x_ratio, y_ratio = check_data.get_scale_ratio('./data/test_data')
 
-
 model = keras.models.load_model('model_3PEOPLE_DRAW2_10.h5')
 
 with open('./data/test_data') as f:
@@ -18,8 +17,7 @@ with open('./data/test_data') as f:
         points = sorted(points, key=lambda x: x['time'])
         points = get_velocity(points)
         for point in points:
-            data[i][int(point['x']*x_ratio)][int(point['y']*y_ratio)] = [1, point['time'], point['v']]
+            data[i][int(point['x'] * x_ratio)][int(point['y'] * y_ratio)] = [1, point['time'], point['v']]
     predictions = model.predict(data)
     for i in range(60):
-        print('NO.'+str(i)+' predict to:'+str(np.argmax(predictions[i]))+' num is:'+ str(predictions[i]))
-
+        print('NO.' + str(i) + ' predict to:' + str(np.argmax(predictions[i])) + ' num is:' + str(predictions[i]))

@@ -38,5 +38,5 @@ def get_scale_ratio(file_paths, width=128, height=128):
 
 
 if __name__ == '__main__':
-    w, h = get_scale_ratio(['./data/sun2', './data/yuan2', './data/yu2'])
+    w, h = get_scale_ratio(['./data/siamese_data/mul_sun', './data/siamese_data/mul_yu', './data/siamese_data/mul_yuan'])
     print(w, h)
