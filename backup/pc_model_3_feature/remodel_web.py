@@ -1,10 +1,10 @@
 import keras
 import numpy as np
 
-from check_data import get_scale_ratio
-from data_trans import analysis_data
-from fake_data import create_fake
-from preprocess_web import get_velocity
+from utils.check_data import get_scale_ratio
+from utils.data_trans import analysis_data
+from utils.fake_data import create_fake
+from backup.pc_model_3_feature.preprocess_web import get_velocity
 
 
 def validation(file_path):

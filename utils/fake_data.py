@@ -1,10 +1,26 @@
 # 制作假数据
-import numpy as np
-import pandas as pd
 import math
-import data_trans
 import random
-import draw_time
+
+import pandas as pd
+
+from utils import data_trans
+from utils import draw_time
+
+
+def point_rotate(angle, x, y, point_x, point_y):
+    """
+    点绕点旋转
+    :param angle:角度
+    :param x:输入的点
+    :param y:
+    :param point_x:绕旋转的点
+    :param point_y:
+    :return:
+    """
+    rotate_x = (x - point_x) * math.cos(angle) + (y - point_y) * math.sin(angle) + point_x
+    rotate_y = (y - point_y) * math.cos(angle) - (x - point_x) * math.sin(angle) + point_y
+    return rotate_x, rotate_y
 
 
 def create_fake(ps):

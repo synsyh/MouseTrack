@@ -1,8 +1,7 @@
 import linecache
 import math
 
-import check_data
-import data_trans
+from utils import data_trans, check_data
 import numpy as np
 import random
 

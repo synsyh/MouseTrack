@@ -12,11 +12,8 @@ dst = cv2.cornerHarris(gray, 15, 23, 0.04)
 
 img[dst > 0.01 * dst.max()] = [0, 0, 255]
 cv2.namedWindow("corners", cv2.WINDOW_NORMAL)
-while (True):
+while True:
     cv2.imshow('corners', img)
     if cv2.waitKey(10000) & 0xff == ord('q'):  # 退出循环条件
         break
 cv2.destroyAllWindows()
-# cv2.imshow('corners',img)
-# cv2.waitKey(0) #退出循环条件
-# cv2.destroyAllWindows()

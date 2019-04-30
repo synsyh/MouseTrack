@@ -3,7 +3,7 @@ import random
 
 import numpy as np
 
-import data_trans
+from utils import data_trans
 from siamese_preprocess import get_velocity
 
 
@@ -49,7 +49,7 @@ def create_mul2():
                                 continue
                             for j1 in range(15):
                                 second = all_lines[x1][y1][j1]
-                                w.write(first.strip() + second.strip() + '\n')
+                                w.write(first.strip() + ' ' + second.strip() + '\n')
 
 
 def get_batch():
@@ -121,3 +121,6 @@ def get_eval_batch():
         for point in false_points:
             data[1][z_2_fs[i]][int(point['x'] * x_ratio)][int(point['y'] * y_ratio)] = [1, point['time'] / 100,
                                                                                         point['v']]
+
+
+create_mul2()

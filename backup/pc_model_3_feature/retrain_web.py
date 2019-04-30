@@ -1,10 +1,8 @@
 # 模型再训练，固定好模型，训练全连接层 web
 import keras
-import data_trans
+from utils import data_trans, check_data, fake_data
 import math
 import numpy as np
-import check_data
-import fake_data
 
 
 def get_velocity(ps):
@@ -23,7 +21,7 @@ model_path = './model_3PEOPLE_DRAW2_10.h5'
 data = np.zeros((n, 128, 128, 3))
 model = keras.models.load_model(model_path)
 
-for layer in model.layers[:-1]:
+for layer in model.layers[:-3]:
     layer.trainable = False
 
 x_ratio, y_ratio = check_data.get_scale_ratio(file_path)
@@ -54,4 +52,3 @@ with open('./data/xuhao_new') as f:
     predictions = model.predict(test_data)
     for i in range(40):
         print('num:'+str(i)+' predict to:' + str(np.argmax(predictions[i])) + ' num is:' + str(max(predictions[i])))
-

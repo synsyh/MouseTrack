@@ -2,7 +2,7 @@ import numpy as np
 
 import keras
 
-import data_trans
+from utils import data_trans
 from siamese_preprocess import get_velocity
 
 

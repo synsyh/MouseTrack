@@ -2,9 +2,8 @@
 import keras
 import numpy as np
 
-import check_data
-import data_trans
-from preprocess_web import get_velocity
+from utils import data_trans, check_data
+from backup.pc_model_3_feature.preprocess_web import get_velocity
 
 data = np.zeros((60, 128, 128, 3))
 x_ratio, y_ratio = check_data.get_scale_ratio('./data/test_data')

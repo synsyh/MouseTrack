@@ -3,6 +3,7 @@ import keras
 import numpy as np
 import cv2
 
+
 # 鼠标回调函数
 def draw_circle(event, x, y, flags, param):
     global ix, iy, drawing, mode
@@ -24,6 +25,7 @@ def draw_circle(event, x, y, flags, param):
         y = max(0, y)
         y = min(y, 254)
         img[y][x][0] = 255
+
 
 data = np.load('mouse_track.npz')
 model = keras.models.load_model('./data/mouse_track_0118_1PARA_3.h5')
@@ -51,4 +53,3 @@ while True:
         break
 
 cv2.destroyAllWindows()
-
